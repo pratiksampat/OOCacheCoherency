@@ -43,18 +43,21 @@ bool MainMemory::push(int pid,vector<string> data,string op,int alloc_size,vecto
        this->memory[last_addr].pid = pid;
        this->memory[last_addr].data = data[i];
        this->memory[last_addr].type = "d";
+       this->memory[last_addr].valid = true;
        last_addr ++;
     }
     this->memory[last_addr].address = last_addr+1000;
     this->memory[last_addr].pid = pid;
     this->memory[last_addr].data = data[i];
-    this->memory[last_addr].type = "wb"; // Data rewrite 
+    this->memory[last_addr].type = "wb"; // Data rewrite
+    this->memory[last_addr].valid = true; 
     last_addr ++;
 
     this->memory[last_addr].address = last_addr+1000;
     this->memory[last_addr].pid = pid;
     this->memory[last_addr].data = op;
     this->memory[last_addr].type = "i";
+    this->memory[last_addr].valid = true;
     last_addr ++;
 
     // Kept a print for DEBUG -- Will remove completely when satisfied.
@@ -78,17 +81,18 @@ bool MainMemory::push(int pid,vector<string> data,string op,int alloc_size,vecto
 }
 void MainMemory::change_op(int pid, string op){
     int index = find(pid);
-    //find start address and size 
-    int base_addr=index;
-    int size=1;
-    while(this->memory[index].type != "i"){
-        index++;
-        size++;
+    //find start address and size
+    if(index!=-1)
+    { 
+        int base_addr=index;
+        int size=1;
+        while(this->memory[index].type != "i"){
+            index++;
+            size++;
+        }
+        this->memory[index].data = op;
+        dir->choose_cpu(base_addr,size,pid);
     }
-    this->memory[index].data = op;
-    dir->choose_cpu(base_addr,size,pid);
-    // ---------- TODO ----------
-    // invoke the directory from here 
 
 }
 
@@ -145,9 +149,19 @@ string MainMemory::getOp(int pid){
 
 int MainMemory::find(int pid){
     for(int i=0; i<this->size; i++){
-        if(this->memory[i].pid == pid){
+        if(this->memory[i].pid == pid && this->memory[i].valid==true){
             return i;
         }
     }
     return -1;
+}
+
+//delete from mainmen
+void MainMemory::removemem(int pid)
+{
+    for(int i=0; i<this->size; i++){
+        if(this->memory[i].pid == pid){
+             this->memory[i].valid=false;
+        }
+    }
 }

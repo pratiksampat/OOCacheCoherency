@@ -104,6 +104,20 @@ void Directory::update_map(int pid,int addr, int new_val)
         }
     }
 }
+void Directory::finished_exec(int pid)
+{
+    //found in cache map
+    if(cache_map.find(pid)!=cache_map.end())
+    {
+        cache_map.at(pid).n_cache-=1;
+        if(cache_map.at(pid).n_cache==0)
+        {
+            cache_map.erase(pid);
+            MainMemory *m1 = m1->getInstance();
+            m1->removemem(pid);
+        }
+    }
+}
 //called by cache when it has updated dirty)
 void Directory::finished_update(int pid)
 {
