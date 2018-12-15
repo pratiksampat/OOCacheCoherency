@@ -11,6 +11,7 @@ struct mem{
     int address;
     std::string type;
     std::string data;
+    bool valid=false;
 };
 class MainMemory{
 private:
@@ -32,6 +33,7 @@ public:
     std::map<int, std::string> getData(int);
     std::string getOp(int);
     void writeBack(int, std::string, std::string);
+    void removemem(int pid);
 };
 
 #endif

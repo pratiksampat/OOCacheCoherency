@@ -30,8 +30,12 @@ void CPU::execute(int pid, string op, Cache c)
     MainMemory *m1 = m1->getInstance();
 
     //Write to both the main memory and the cache.
-    m1->writeBack(wb_addr, to_string(data[2]), op);
     c.writeBack(wb_addr, to_string(data[2]));
+    dir->update_map(pid,wb_addr,data[2]);
+    //add sleep here
+    m1->writeBack(wb_addr, to_string(data[2]), op);
+    //cpu finished exec
+    dir->finished_exec(pid);
     c.display();
     //DEBUG
     // cout << "Sum : "<<data[2]<<endl;
@@ -39,6 +43,6 @@ void CPU::execute(int pid, string op, Cache c)
     //     cout<<data[i]<<endl;
     // }
 
-    dir->update_map(pid,wb_addr,data[2]);
+    
 
 }

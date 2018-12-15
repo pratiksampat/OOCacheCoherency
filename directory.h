@@ -35,5 +35,6 @@ class Directory
         void choose_cpu(int base_addr,int size,int pid);
         void update_map(int pid,int address, int new_val);
         void finished_update(int pid);
+        void finished_exec(int pid);
 };
 #endif
