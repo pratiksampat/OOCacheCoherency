@@ -91,7 +91,7 @@ void Directory::update_map(int pid,int addr, int new_val)
         cout << "update map : d_cache is ";
         cout << cache_map.at(pid).d_cache << endl;
 
-        if(cache_map.at(pid).d_cache == 0){
+        if(cache_map.at(pid).d_cache == 1){
             cout <<endl<< "Consistent -- Exiting" << endl;
             return;    // Don't notify if nobody else is depending on it.
         }
