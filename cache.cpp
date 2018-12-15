@@ -3,7 +3,10 @@
 #include <map>
 #include <iterator>
 #include "cache.h"
+<<<<<<< HEAD
 #include "directory.h"
+=======
+>>>>>>> 16223af75f65e69a6f42c34e3104868e5698a8ff
 
 using namespace std;
 

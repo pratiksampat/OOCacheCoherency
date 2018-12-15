@@ -124,7 +124,7 @@ map<int, string> MainMemory::getData(int pid){
         if(this->memory[i].address == 0){
             break;
         }
-        if(this->memory[i].pid == pid && (this->memory[i].type == "d" || this->memory[i].type == "wb" || this->memory[i].type == "wb_add")){
+        if(this->memory[i].pid == pid && (this->memory[i].type == "d" || this->memory[i].type == "wb" || this->memory[i].type == "wb_add" || this->memory[i].type == "wb_sub")){
             returnMap[this->memory[i].address] = this->memory[i].data;
         }
     }

@@ -36,7 +36,7 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     //if pid not in cache
     if(cache_map.find(pid)==cache_map.end())
     {
-        cout << "not found in cache :size is"<<size <<endl;
+        cout << "not found in cache :pid is" <<endl;
         cache_counters x;
         x.n_cache=1;
         x.d_cache=0;
@@ -45,7 +45,7 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     }
     else
     {
-        cout << "found in cache :size is"<<size<<endl;
+        cout << "found in cache :pid is"<<pid<<endl;
         cache_map.at(pid).n_cache+=1;
         cout << "n cache"<<cache_map.at(pid).n_cache <<endl;
         cout << "d cache"<<cache_map.at(pid).d_cache <<endl;
@@ -61,9 +61,6 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     map<int, string> addrMap;
     MainMemory *m1 = m1->getInstance();
     addrMap = m1->getData(pid);
-    for(auto it=addrMap.begin();it!=addrMap.end();++it){
-        cout << it->first<<" "<<it->second<<endl;
-    }
     string op = m1->getOp(pid);
     cout<< "Operation : "<<op<<endl;
     cache[chosen_cpu].store(pid,addrMap);
