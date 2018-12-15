@@ -12,6 +12,5 @@ class CPU
     public:
     CPU();
     void execute(int, std::string, Cache );
-    void modify(int pid,int new_val);
 };
 #endif

@@ -25,5 +25,6 @@ public:
     void display();
     int getWritebackAddr(int);
     void writeBack(int, std::string);
+    void modify(int pid,int addr,int new_val);
 };
 #endif

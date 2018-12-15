@@ -111,9 +111,9 @@ void MainMemory::writeBack(int addr, string data, string op){
         if(this->memory[i].address == 0){
             break;
         }
-        if(this->memory[i].address == addr && this->memory[i].type == "wb"){
+        if(this->memory[i].address == addr){
             // this->memory[i].type += "_";
-            this->memory[i].type += "_" + op;
+            this->memory[i].type = "wb_" + op;
             this->memory[i].data = data;
         }
     }
@@ -124,7 +124,7 @@ map<int, string> MainMemory::getData(int pid){
         if(this->memory[i].address == 0){
             break;
         }
-        if(this->memory[i].pid == pid && (this->memory[i].type == "d" || this->memory[i].type == "wb")){
+        if(this->memory[i].pid == pid && (this->memory[i].type == "d" || this->memory[i].type == "wb" || this->memory[i].type == "wb_add" || this->memory[i].type == "wb_sub")){
             returnMap[this->memory[i].address] = this->memory[i].data;
         }
     }

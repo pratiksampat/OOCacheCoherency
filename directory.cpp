@@ -45,9 +45,10 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     }
     else
     {
-        cout << "found in cache :pid is" <<endl;
+        cout << "found in cache :pid is"<<pid<<endl;
         cache_map.at(pid).n_cache+=1;
-        cout << cache_map.at(pid).n_cache <<endl;
+        cout << "n cache"<<cache_map.at(pid).n_cache <<endl;
+        cout << "d cache"<<cache_map.at(pid).d_cache <<endl;
     }
     //choose cpu and call cpu
     int chosen_cpu=cpu_avail->choose_cpu();
@@ -85,12 +86,12 @@ void Directory::update_map(int pid,int addr, int new_val)
     {
         
         //d_cache will be one less than n_cache
-        cache_map.at(pid).d_cache=cache_map.at(pid).n_cache-1;
+        cache_map.at(pid).d_cache=cache_map.at(pid).n_cache;
         //update cache ref
-        // cout << "update map : d_cache is" <<endl;
-        // cout << cache_map.at(pid).d_cache << endl;
+        cout << "update map : d_cache is ";
+        cout << cache_map.at(pid).d_cache << endl;
 
-        if(cache_map.at(pid).d_cache == 0){
+        if(cache_map.at(pid).d_cache == 1){
             cout <<endl<< "Consistent -- Exiting" << endl;
             return;    // Don't notify if nobody else is depending on it.
         }
@@ -99,16 +100,17 @@ void Directory::update_map(int pid,int addr, int new_val)
         //notify all cpus
         for(int i=0;i<NO_CPU;i++)
         {
-            cpu[i].modify(pid,new_val);
+            cache[i].modify(pid,addr,new_val);
         }
     }
 }
-//called by cpu when it has updated cache(dirty)
+//called by cache when it has updated dirty)
 void Directory::finished_update(int pid)
 {
     if(cache_map.find(pid)!=cache_map.end())
     {
         cache_map.at(pid).d_cache-=1;
+        cout << "updated d_cache is"<<cache_map.at(pid).d_cache<<endl;
     }
     else
     {

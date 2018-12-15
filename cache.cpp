@@ -3,6 +3,7 @@
 #include <map>
 #include <iterator>
 #include "cache.h"
+#include "directory.h"
 
 using namespace std;
 
@@ -84,5 +85,21 @@ void Cache::display(){
         cout<<this->memory[i].pid<<"\t";
         cout<<this->memory[i].data<<"\t";
         cout<<endl;
+    }
+}
+void Cache::modify(int pid,int addr,int new_val)
+{
+    
+    for(int i=0;i<size;i++)
+    {
+        if(this->memory[i].pid==pid && this->memory[i].address==addr)
+        {
+            writeBack(addr, to_string(new_val));
+            cout << "Modify cache : pid is" << pid<<endl;
+            display();
+            dir=dir->getInstance();
+            dir->finished_update(pid);
+            break;
+        }
     }
 }

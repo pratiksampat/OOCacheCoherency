@@ -22,14 +22,17 @@ void CPU::execute(int pid, string op, Cache c)
     if(op == "add"){
         data[2] = data[0] + data[1];
     }
+    else if(op=="sub"){
+        data[2]=data[0]-data[1];
+    }
     int wb_addr = c.getWritebackAddr(pid);
-    // cout<< "Wb_Addr : "<< wb_addr<<endl;
+    cout<< "Wb_Addr : "<< wb_addr<<endl;
     MainMemory *m1 = m1->getInstance();
 
     //Write to both the main memory and the cache.
     m1->writeBack(wb_addr, to_string(data[2]), op);
     c.writeBack(wb_addr, to_string(data[2]));
-
+    c.display();
     //DEBUG
     // cout << "Sum : "<<data[2]<<endl;
     // for(int i=0; i<2; i++){
@@ -38,8 +41,4 @@ void CPU::execute(int pid, string op, Cache c)
 
     dir->update_map(pid,wb_addr,data[2]);
 
-}
-void CPU::modify(int pid,int new_val)
-{
-    cout << "CPU modify: pid is" << new_val<<endl;
 }

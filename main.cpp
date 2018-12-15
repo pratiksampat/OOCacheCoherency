@@ -45,10 +45,11 @@ int main(){
     if(!m1->push(c2.getpid(),data,operation,allocation_size,proc_list)){
         cout<<"Push error"<<endl;
     }*/
-    // operation = "sub";
+     operation = "sub";
+     m1->display_memory();
     //If you wish to change the operation on the same data. 
     //i.e same data different CPU and local cache ~ Condition for concurrancy
-    // m1->change_op(c1.getpid(),operation);
+     m1->change_op(c1.getpid(),operation);
 
     //Display the contents of the RAM.
     m1->display_memory();
