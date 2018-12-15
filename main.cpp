@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "main_memory.h"
-#include "cpu_alloc.h"
+#include "./main_memory/main_memory.h"
+#include "./cpu_alloc/cpu_alloc.h"
 #include<bits/stdc++.h> 
 
 using namespace std;
@@ -45,6 +45,8 @@ int main(){
     if(!m1->push(c2.getpid(),data,operation,allocation_size,proc_list)){
         cout<<"Push error"<<endl;
     }*/
+
+    cout<<"OP done -------------------------\n";
      operation = "sub";
      m1->display_memory();
     //If you wish to change the operation on the same data. 

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "directory.h"
+#include "../directory/directory.h"
 
 struct mem{
     int pid;

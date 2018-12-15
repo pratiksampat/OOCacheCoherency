@@ -1,9 +1,9 @@
 #include <iostream>
 #include "cpu.h"
 #include<bits/stdc++.h> 
-#include "directory.h"
-#include "cache.h"
-#include "main_memory.h"
+#include "../directory/directory.h"
+#include "../cache/cache.h"
+#include "../main_memory/main_memory.h"
 using namespace std;
 
 CPU::CPU()

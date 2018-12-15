@@ -2,7 +2,7 @@
 #define CPU_H
 
 #include <map>
-#include "cache.h"
+#include "../cache/cache.h"
 
 class Directory;
 class CPU

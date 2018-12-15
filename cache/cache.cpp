@@ -3,7 +3,7 @@
 #include <map>
 #include <iterator>
 #include "cache.h"
-#include "directory.h"
+#include "../directory/directory.h"
 
 using namespace std;
 

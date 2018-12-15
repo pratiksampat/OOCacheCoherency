@@ -3,9 +3,9 @@
 #include <string>
 #include "directory.h"
 #include<bits/stdc++.h> 
-#include "cpu.h"
-#include "cache.h"
-#include "main_memory.h"
+#include "../cpu/cpu.h"
+#include "../cache/cache.h"
+#include "../main_memory/main_memory.h"
 #include <map>
 #include <iterator> 
 

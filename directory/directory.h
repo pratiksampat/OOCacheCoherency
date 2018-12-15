@@ -1,10 +1,10 @@
 #ifndef DIRECTORY_H
 #define DIRECTORY_H
-#include "cpu_avail.h"
+#include "../cpu_avail/cpu_avail.h"
 //#include "cpu.h"
 #include <unordered_map>
 #include<bits/stdc++.h> 
-#include "cache.h"
+#include "../cache/cache.h"
 
 //no of cpu/cache
 #define NO_CPU 3
