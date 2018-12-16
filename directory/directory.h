@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include<bits/stdc++.h> 
 #include "../cache/cache.h"
+#include <mutex>
 
 //no of cpu/cache
 #define NO_CPU 3

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <mutex>
 #include "../directory/directory.h"
 
 struct mem{

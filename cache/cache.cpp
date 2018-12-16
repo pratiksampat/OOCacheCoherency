@@ -16,13 +16,6 @@ Cache::Cache(){
 }
 
 bool Cache::store(int pid, map<int, string> addrMap){
-    // if(index > MAX_SIZE)
-    //     return false;
-    // this->memory[index].pid = pid;
-    // this->memory[index].address = address;
-    // this->memory[index].data = data;
-    // index++;
-    // return true;
     map<int, string>::iterator itr;
     if(index > MAX_SIZE)
         return false;
@@ -45,10 +38,6 @@ int *Cache::getData(int pid){
         if(this->memory[i].pid ==  pid){
             data[index++] = stoi(this->memory[i].data);
         }
-        // cout<<this->memory[i].address<<"\t";
-        // cout<<this->memory[i].pid<<"\t";
-        // cout<<this->memory[i].data<<"\t";
-        // cout<<endl;
     }
     return data;
 }

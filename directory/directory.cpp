@@ -14,6 +14,7 @@ using namespace std;
 bool Directory::singleFlag=false;
 Directory* Directory::dir=NULL;
 
+mutex dirMem;
 Directory* Directory::getInstance()
 {
     if(!singleFlag){
@@ -34,6 +35,7 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
 {
     //cout <<"in dir:: choose cpu " << size <<endl;
     //if pid not in cache
+    // dirMem.lock();
     if(cache_map.find(pid)==cache_map.end())
     {
         cout << "not found in cache :pid is" <<endl;
@@ -52,6 +54,7 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     }
     //choose cpu and call cpu
     int chosen_cpu=cpu_avail->choose_cpu();
+    // dirMem.unlock();
     if(chosen_cpu == -1){
         cout << "NO CPU AVAILABLE : Ideally use wait queue - implementation pending "<<endl;
         exit(0);
@@ -63,6 +66,11 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     addrMap = m1->getData(pid);
     string op = m1->getOp(pid);
     cout<< "Operation : "<<op<<endl;
+
+    // TODO : Run a loop and check if the pid is there in any other cache.
+        // If there then dump everything from there in this cache 
+        // If not then dump from the addrMap
+
     cache[chosen_cpu].store(pid,addrMap);
     // cache[chosen_cpu].display();
 
@@ -82,6 +90,7 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
 //called by cpu when new value written into cache
 void Directory::update_map(int pid,int addr, int new_val)
 {
+    // dirMem.lock();
     if(cache_map.find(pid)!=cache_map.end())
     {
         
@@ -92,7 +101,7 @@ void Directory::update_map(int pid,int addr, int new_val)
         cout << cache_map.at(pid).d_cache << endl;
 
         if(cache_map.at(pid).d_cache == 1){
-            cout <<endl<< "Consistent -- Exiting" << endl;
+            cout <<endl<< "Consistent ---------------- Exiting" << endl;
             return;    // Don't notify if nobody else is depending on it.
         }
         cache_map.at(pid).address = addr;
@@ -103,9 +112,13 @@ void Directory::update_map(int pid,int addr, int new_val)
             cache[i].modify(pid,addr,new_val);
         }
     }
+    // dirMem.unlock();
 }
 void Directory::finished_exec(int pid)
 {
+    // cout<<"Entered"<<endl;
+    // dirMem.lock();
+    // cout<<"Entered"<<endl;
     //found in cache map
     if(cache_map.find(pid)!=cache_map.end())
     {
@@ -117,10 +130,12 @@ void Directory::finished_exec(int pid)
             m1->removemem(pid);
         }
     }
+    // dirMem.unlock();
 }
 //called by cache when it has updated dirty)
 void Directory::finished_update(int pid)
 {
+    // dirMem.lock();
     if(cache_map.find(pid)!=cache_map.end())
     {
         cache_map.at(pid).d_cache-=1;
@@ -130,4 +145,5 @@ void Directory::finished_update(int pid)
     {
         cout << "not found" <<endl;
     }
+    // dirMem.unlock();
 }

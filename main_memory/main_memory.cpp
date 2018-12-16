@@ -8,6 +8,7 @@
 using namespace std;
 
 #define MAX_SIZE 10
+mutex mainMem;
 
 bool MainMemory::singleFlag = false;
 MainMemory* MainMemory::s_obj = NULL;
@@ -31,6 +32,7 @@ MainMemory :: MainMemory(int size){
 }
 bool MainMemory::push(int pid,vector<string> data,string op,int alloc_size,vector<int> proc_list){
     vector<int>::iterator it;
+    mainMem.lock();
     if(size_left < alloc_size || find(pid) != -1){
         return false;
     }
@@ -74,6 +76,7 @@ bool MainMemory::push(int pid,vector<string> data,string op,int alloc_size,vecto
     // }
     this->size_left -= alloc_size;
     cout<<"Size left = "<<size_left<<endl;
+    mainMem.unlock();
     dir->choose_cpu(base_addr,alloc_size,pid);
     // ---------- TODO ----------
     // invoke the directory from here 
@@ -90,7 +93,9 @@ void MainMemory::change_op(int pid, string op){
             index++;
             size++;
         }
+        mainMem.lock();
         this->memory[index].data = op;
+        mainMem.unlock();
         dir->choose_cpu(base_addr,size,pid);
     }
 
