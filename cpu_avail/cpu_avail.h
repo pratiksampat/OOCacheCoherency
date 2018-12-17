@@ -1,5 +1,7 @@
 #ifndef CPUAVAIL_H
 #define CPUAVAIL_H
+
+#include <mutex>
 struct cpu_aux
 {
     bool is_free;

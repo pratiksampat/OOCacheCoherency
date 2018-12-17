@@ -17,11 +17,13 @@ Directory* Directory::dir=NULL;
 mutex dirMem;
 Directory* Directory::getInstance()
 {
+    dirMem.lock();
     if(!singleFlag){
         // cout<<"New object created\n";
         dir = new Directory();
         singleFlag = true;
     }
+    dirMem.unlock();
     return dir;
 }
 Directory::Directory()
@@ -62,6 +64,7 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     cout << "Chosen CPU : "<<chosen_cpu <<endl;
     // Store in cache
     map<int, string> addrMap;
+    map<int, string> c_addrMap;
     MainMemory *m1 = m1->getInstance();
     addrMap = m1->getData(pid);
     string op = m1->getOp(pid);
@@ -70,8 +73,24 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     // TODO : Run a loop and check if the pid is there in any other cache.
         // If there then dump everything from there in this cache 
         // If not then dump from the addrMap
-
-    cache[chosen_cpu].store(pid,addrMap);
+    bool incache=false;
+    for(int i=0;i<NO_CPU;i++)
+    {
+        c_addrMap=cache[i].getAllData(pid);
+        if(c_addrMap.size()!=0)
+        {
+            incache=true;
+            break;
+        }
+    }
+    if(incache==false)
+    {
+        cache[chosen_cpu].store(pid,addrMap);
+    }
+    else
+    {
+        cache[chosen_cpu].store(pid,c_addrMap);
+    }
     // cache[chosen_cpu].display();
 
     // cout << "type : "<<typeid(cache[chosen_cpu]).name()<<endl;

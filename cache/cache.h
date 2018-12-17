@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 class Directory;
 struct c_mem{
@@ -20,6 +21,7 @@ private:
 public:
     Cache();
     int *getData(int);
+    std::map<int, std::string> getAllData(int pid);
     //Type not needed as don't push op to cache
     bool store(int, std::map<int, std::string>);
     void display();
