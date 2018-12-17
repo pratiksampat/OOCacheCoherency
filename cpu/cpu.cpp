@@ -34,9 +34,10 @@ void CPU::execute(int pid, string op, Cache c)
     MainMemory *m1 = m1->getInstance();
 
     //Write to both the main memory and the cache.
-    sleep(5);
+    
     c.writeBack(wb_addr, to_string(data[2]));
     dir->update_map(pid,wb_addr,data[2]);
+    sleep(5);
     // cout<<"Done"<<endl;
     //add sleep here
     cout<<"Sleeping------"<<endl;

@@ -14,12 +14,14 @@ bool MainMemory::singleFlag = false;
 MainMemory* MainMemory::s_obj = NULL;
 // Singleton instance
 MainMemory* MainMemory::getInstance(){
+    mainMem.lock();
     if(!singleFlag){
         // cout<<"New object created\n";
         // int size = MAX_SIZE;
         s_obj = new MainMemory(MAX_SIZE);
         singleFlag = true;
     }
+    mainMem.unlock();
     return s_obj;
 }
 
@@ -133,7 +135,7 @@ map<int, string> MainMemory::getData(int pid){
         if(this->memory[i].address == 0){
             break;
         }
-        if(this->memory[i].pid == pid && (this->memory[i].type == "d" || this->memory[i].type == "wb" || this->memory[i].type == "wb_add" || this->memory[i].type == "wb_sub")){
+        if(this->memory[i].pid == pid && (this->memory[i].type != "i" )){
             returnMap[this->memory[i].address] = this->memory[i].data;
         }
     }

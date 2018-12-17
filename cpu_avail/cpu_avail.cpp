@@ -7,13 +7,16 @@
 using namespace std;
 bool CPUAvail::singleFlag = false;
 CPUAvail* CPUAvail::s_obj = NULL;
+mutex m;
 CPUAvail * CPUAvail::getInstance(int no_cpu)
 {
+    m.lock();
     if(!singleFlag){
         // cout<<"New object created\n";
         s_obj = new CPUAvail(no_cpu);
         singleFlag = true;
     }
+    m.unlock();
     return s_obj;
 }
 CPUAvail::CPUAvail(int no_cpu)

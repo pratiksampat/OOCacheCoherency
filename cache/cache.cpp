@@ -41,6 +41,20 @@ int *Cache::getData(int pid){
     }
     return data;
 }
+map<int, string> Cache::getAllData(int pid){
+    map<int, string> returnMap; 
+    for(int i=0; i<this->size; i++){
+        if(this->memory[i].address == 0){
+            break;
+        }
+        if(this->memory[i].pid == pid){
+
+            returnMap[this->memory[i].address] = this->memory[i].data;
+        }
+    }
+    return returnMap;
+}
+
 
 int Cache::getWritebackAddr(int pid){
     int i = 0;
