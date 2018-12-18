@@ -13,42 +13,38 @@ CPU::CPU()
 }
 void CPU::execute(int pid, string op, Cache c)
 {
-    cout <<endl<< "Executing ----------------";
+    cout <<endl<< "Execution Begun ----------------"<<endl;
     dir=dir->getInstance();
     // cout << "CPU selected: pid is" << pid<<endl;
     c.display();
     int *data = c.getData(pid);
-
+    int result;
     // Don't use if statements inherit these operations please
     if(op == "add"){
         cout<<"Operation ----------------Add"<<endl;
-        data[2] = data[0] + data[1];
+        result = data[0] + data[1];
     }
-    else if(op=="sub"){
-        cout<<"Operation ----------------Sub"<<endl;
-        cout<<"Data[2] :"<<data[2]<<" Data[1]"<<data[1]<<endl;
-        data[2]=data[2]-data[1];
+    else if(op=="mul"){
+        cout<<"Operation ----------------Mul"<<endl;
+        // cout<<"Data[2] :"<<data[2]<<" Data[1]"<<data[1]<<endl;
+        result=data[0] * data[1];
     }
     int wb_addr = c.getWritebackAddr(pid);
-    cout<< "Wb_Addr : "<< wb_addr<<endl;
+    cout<< "Writeback address : "<< wb_addr<<endl;
     MainMemory *m1 = m1->getInstance();
 
     //Write to both the main memory and the cache.
     
-    c.writeBack(wb_addr, to_string(data[2]));
-    dir->update_map(pid,wb_addr,data[2]);
-    sleep(5);
-    // cout<<"Done"<<endl;
-    //add sleep here
-    cout<<"Sleeping------"<<endl;
+    c.writeBack(wb_addr, to_string(result));
+    dir->update_map(pid,wb_addr,result);
     c.display();
-   
+    cout<<"Sleeping----------------"<<endl;
+    sleep(5);
+    //add sleep here
     
-    m1->writeBack(wb_addr, to_string(data[2]), op);
-    // cout<<"Done"<<endl;
+    m1->writeBack(wb_addr, to_string(result), op);
     //cpu finished exec
     dir->finished_exec(pid);
-    // cout<<"Done"<<endl;
     
     //DEBUG
     // cout << "Sum : "<<data[2]<<endl;

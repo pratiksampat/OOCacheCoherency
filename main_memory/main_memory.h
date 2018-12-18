@@ -28,7 +28,7 @@ private:
     int find(int);
 public:
     static MainMemory *getInstance();
-    bool push(int,std::vector<std::string>,std::string,int,std::vector<int>);
+    bool push(int,std::vector<std::string>,int, std::string,int,std::vector<int>);
     void change_op(int, std::string);
     void display_memory();
     std::map<int, std::string> getData(int);

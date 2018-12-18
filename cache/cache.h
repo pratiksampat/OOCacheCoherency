@@ -9,7 +9,7 @@ class Directory;
 struct c_mem{
     int pid;
     int address;
-    // char type;
+    std::string type;
     std::string data;
 };
 class Cache{

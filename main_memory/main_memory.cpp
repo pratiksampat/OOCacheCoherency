@@ -32,7 +32,7 @@ MainMemory :: MainMemory(int size){
     this->last_addr = 0;
     this->dir=dir->getInstance();
 }
-bool MainMemory::push(int pid,vector<string> data,string op,int alloc_size,vector<int> proc_list){
+bool MainMemory::push(int pid,vector<string> data,int wbIndex,string op,int alloc_size,vector<int> proc_list){
     vector<int>::iterator it;
     mainMem.lock();
     if(size_left < alloc_size || find(pid) != -1){
@@ -42,20 +42,23 @@ bool MainMemory::push(int pid,vector<string> data,string op,int alloc_size,vecto
     // last_addr+=1;
     // base to pass to directory
     int base_addr=last_addr+1000;
-    for(i=0; i<alloc_size - 2; i++){
-       this->memory[last_addr].address = last_addr+1000;
-       this->memory[last_addr].pid = pid;
-       this->memory[last_addr].data = data[i];
-       this->memory[last_addr].type = "d";
-       this->memory[last_addr].valid = true;
-       last_addr ++;
+    for(i=0; i<alloc_size - 1; i++){
+        this->memory[last_addr].address = last_addr+1000;
+        this->memory[last_addr].pid = pid;
+        this->memory[last_addr].data = data[i];
+        if(i == wbIndex)
+            this->memory[last_addr].type = "wb";
+        else
+             this->memory[last_addr].type = "d";
+        this->memory[last_addr].valid = true;
+        last_addr ++;
     }
-    this->memory[last_addr].address = last_addr+1000;
-    this->memory[last_addr].pid = pid;
-    this->memory[last_addr].data = data[i];
-    this->memory[last_addr].type = "wb"; // Data rewrite
-    this->memory[last_addr].valid = true; 
-    last_addr ++;
+    // this->memory[last_addr].address = last_addr+1000;
+    // this->memory[last_addr].pid = pid;
+    // this->memory[last_addr].data = data[i];
+    // this->memory[last_addr].type = "wb"; // Data rewrite
+    // this->memory[last_addr].valid = true; 
+    // last_addr ++;
 
     this->memory[last_addr].address = last_addr+1000;
     this->memory[last_addr].pid = pid;
@@ -136,7 +139,7 @@ map<int, string> MainMemory::getData(int pid){
             break;
         }
         if(this->memory[i].pid == pid && (this->memory[i].type != "i" )){
-            returnMap[this->memory[i].address] = this->memory[i].data;
+            returnMap[this->memory[i].address] = this->memory[i].data + ';' + this->memory[i].type ;
         }
     }
     return returnMap;
@@ -168,6 +171,13 @@ void MainMemory::removemem(int pid)
 {
     for(int i=0; i<this->size; i++){
         if(this->memory[i].pid == pid){
+            if (this->memory[i].type.find("wb") != std::string::npos) {
+                cout<<"---------------------------------------Final-------------------------------"<<endl;
+                cout << "Result : "<< this->memory[i].data<<endl;
+                cout << "Last thread op executed :" << this->memory[i].type.substr(3)<<endl;
+                cout<<"---------------------------------------------------------------------------"<<endl;
+            }
+
              this->memory[i].valid=false;
         }
     }

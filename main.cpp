@@ -8,8 +8,8 @@
 
 using namespace std;
 
-void push(MainMemory *m1,int pid,vector<string> data,string op,int alloc_size,vector<int> proc_list){
-    m1->push(pid,data,op,alloc_size,proc_list);
+void push(MainMemory *m1,int pid,vector<string> data,int wbIndex, string op,int alloc_size,vector<int> proc_list){
+    m1->push(pid,data,wbIndex,op,alloc_size,proc_list);
     return;
 }
 
@@ -34,7 +34,7 @@ int main(){
     // ---- Main memory operations ----
     MainMemory *m1 = m1->getInstance(); // Make size of the main memory as fixed. Internally 10
     // determine operations
-    vector<string> data = {"2","3", "0"}; // Always the last entry is for writeback
+    vector<string> data = {"2","3"};
     string operation = "add";
     int allocation_size = data.size() + 1; // 1 more for the operation
     // I should probably throw exceptions here instead of return value checking like C
@@ -44,8 +44,9 @@ int main(){
     // }
 
 
-    thread th1(push,m1,c1.getpid(),data,operation,allocation_size,proc_list);
-    operation = "sub";
+    thread th1(push,m1,c1.getpid(),data,1,operation,allocation_size,proc_list);
+
+    operation = "mul";
     sleep(1);
     thread th2(change,m1,c1.getpid(),operation);
     // thread th1(foo,m1,3);

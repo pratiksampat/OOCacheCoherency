@@ -2,12 +2,14 @@
 #include<bits/stdc++.h> 
 #include <map>
 #include <iterator>
+#include <algorithm>
 #include "cache.h"
 #include "../directory/directory.h"
 
 using namespace std;
 
 #define MAX_SIZE 10
+
 
 Cache::Cache(){
     this->memory = new c_mem[MAX_SIZE];
@@ -17,12 +19,25 @@ Cache::Cache(){
 
 bool Cache::store(int pid, map<int, string> addrMap){
     map<int, string>::iterator itr;
+    string token;
+    vector<string> v1;
+    string data;
+    string type;
     if(index > MAX_SIZE)
         return false;
     for (itr = addrMap.begin(); itr != addrMap.end(); ++itr) { 
         this->memory[index].pid =pid;
         this->memory[index].address = itr->first;
-        this->memory[index].data = itr->second;
+        size_t last = 0; 
+        size_t next = 0; 
+        while ((next = itr->second.find(";", last)) != string::npos) { 
+            data =  itr->second.substr(last, next-last);
+            last = next + 1; 
+        } 
+        type  = itr->second.substr(last);
+
+        this->memory[index].data = data;
+        this->memory[index].type = type;
         index ++;
     }
     return true; 
@@ -49,7 +64,7 @@ map<int, string> Cache::getAllData(int pid){
         }
         if(this->memory[i].pid == pid){
 
-            returnMap[this->memory[i].address] = this->memory[i].data;
+            returnMap[this->memory[i].address] = this->memory[i].data + ";" + this->memory[i].type;
         }
     }
     return returnMap;
@@ -59,11 +74,11 @@ map<int, string> Cache::getAllData(int pid){
 int Cache::getWritebackAddr(int pid){
     int i = 0;
     for(i=0; i<this->size; i++){
-        if(this->memory[i].pid != pid){
-            break;
+        if(this->memory[i].pid == pid && this->memory[i].type == "wb"){
+            return this->memory[i].address;;
         }
     }
-    return this->memory[i-1].address;
+   return -1;
 }
 
 void Cache::writeBack(int addr, string data){
@@ -79,7 +94,7 @@ void Cache::writeBack(int addr, string data){
 
 void Cache::display(){
     cout<< "View of the local cache\n";
-    cout<<"Addr"<<"\t"<<"id"<<"\t"<<"data"<<endl;
+    cout<<"Addr"<<"\t"<<"id"<<"\t"<<"data"<<"\t"<<"type"<<endl;
     for(int i=0; i<this->size; i++){
         if(this->memory[i].address == 0){
             break;
@@ -87,6 +102,7 @@ void Cache::display(){
         cout<<this->memory[i].address<<"\t";
         cout<<this->memory[i].pid<<"\t";
         cout<<this->memory[i].data<<"\t";
+        cout<<this->memory[i].type<<"\t";
         cout<<endl;
     }
 }

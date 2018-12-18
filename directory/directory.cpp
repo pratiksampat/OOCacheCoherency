@@ -68,11 +68,8 @@ void Directory::choose_cpu(int base_addr,int size,int pid)
     MainMemory *m1 = m1->getInstance();
     addrMap = m1->getData(pid);
     string op = m1->getOp(pid);
-    cout<< "Operation : "<<op<<endl;
+    // cout<< "Operation : "<<op<<endl;
 
-    // TODO : Run a loop and check if the pid is there in any other cache.
-        // If there then dump everything from there in this cache 
-        // If not then dump from the addrMap
     bool incache=false;
     for(int i=0;i<NO_CPU;i++)
     {
